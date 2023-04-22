@@ -1,20 +1,19 @@
-const isAuthenticated =  (req, res, next) => {
-    // if(req.session.email){
-    //     next()
-    // }else{
-    //     res.render('login', { status: 'failed '})
-    // }
+import config from "../config/config.js";
 
+const roleAdminValidation = (req, res, next) => {
+  if (req.user.role !== config.ADMIN_ROLE) {
+    res.status(401).send("message: Unauthorized action for USER role");
+  } else {
     next();
-}
+  }
+};
 
-
-const sessionValidation = (req, res, next) => {
-    if(!req.session?.email){
-        next()
-    }else{
-        res.redirect('../../api/products/list');
+const roleUserValidation = (req, res, next) => {
+    if (req.user.role !== config.USER_ROLE) {
+      res.status(401).send("message: Unauthorized action for ADMIN role");
+    } else {
+      next();
     }
-}
+  };
 
-export {sessionValidation, isAuthenticated}
+export { roleAdminValidation, roleUserValidation };

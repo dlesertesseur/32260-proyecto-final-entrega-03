@@ -8,13 +8,13 @@ function getRoleByUser(user) {
       user.email === config.ADMIN_EMAIL &&
       user.password === config.ADMIN_PASSWORD
     ) {
-      role = "admin";
+      role = config.ROLE_ADMIN;
     } else {
-      role = "user";
+      role = config.USER_ROLE;
     }
   } catch (error) {
     console.log(error);
-    role = "user";
+    role = config.USER_ROLE;
   }
 
   return role;

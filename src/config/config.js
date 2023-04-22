@@ -12,6 +12,8 @@ const config = {
   ADMIN_EMAIL: process.env.ADMIN_EMAIL,
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
   PERSISTENCE:process.env.PERSISTENCE,
+  ADMIN_ROLE : "admin",
+  USER_ROLE : "user",
 };
 
 export default config;

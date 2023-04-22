@@ -1,6 +1,6 @@
 import { authenticate, registerUser } from "../services/auth.service.js";
 import { createHash } from "../util/Crypt.js";
-import { getRoleByUser } from "../util/RoleValidator.js";
+import { getRoleByUser } from "../util/Validator.js";
 import { generateAuthToken } from "../util/jwt.js";
 
 const login = async (req, res) => {

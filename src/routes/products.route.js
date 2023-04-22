@@ -8,6 +8,7 @@ import {
   getProductsList,
 } from "../controllers/product.controller.js";
 import { Router } from "express";
+import { roleAdminValidation } from "../middlewares/index.js";
 
 const productRoute = Router();
 
@@ -31,18 +32,21 @@ productRoute.get(
 productRoute.post(
   "/",
   passport.authenticate("current", { session: false }),
+  roleAdminValidation,
   insert
 );
 
 productRoute.put(
   "/:pid",
   passport.authenticate("current", { session: false }),
+  roleAdminValidation,
   update
 );
 
 productRoute.delete(
   "/:pid",
   passport.authenticate("current", { session: false }),
+  roleAdminValidation,
   remove
 );
 
