@@ -1,33 +1,32 @@
-import CategoryDao from "../persistence/nomgoDb/category.dao.js";
-import categorySchema from "../models/category.model.js";
+import CategoryRepository from "../repositories/category.repository.js";
 
-const dao = new CategoryDao("categories", categorySchema);
+const repository = new CategoryRepository();
 
 const getAllCategories = async () => {
-  let ret = await dao.getAll();
+  let ret = await repository.getAll();
   return ret;
 };
 
 const findCategoryById = async (id) => {
   console.log("findCategoryById -> ", id);
-  let ret = await dao.findById(id);
+  let ret = await repository.findById(id);
   return ret;
 };
 
 const insertCategory = async (category) => {
   console.log("insertCategory -> ");
-  let ret = await dao.insert(category);
+  let ret = await repository.insert(category);
   return ret;
 };
 
 const updateCategory = async (pid, body) => {
   console.log("updateCategory -> ");
-  let ret = await dao.update(pid, body);
+  let ret = await repository.update(pid, body);
   return ret;
 };
 
 const deleteCategory = async (pid) => {
-  let ret = await dao.delete(pid);
+  let ret = await repository.delete(pid);
   return ret;
 };
 export { getAllCategories, findCategoryById, insertCategory, updateCategory, deleteCategory };

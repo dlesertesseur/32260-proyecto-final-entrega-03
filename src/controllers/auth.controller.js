@@ -23,15 +23,7 @@ const login = async (req, res) => {
 const loginPassport = async (req, res) => {
   try {
     const user = req.user;
-
-    const accessToken = generateAuthToken({
-      id: user._id,
-      email: user.email,
-      last_name: user.last_name,
-      first_name: user.first_name,
-      cid : user.cart?._id
-    });
-
+    const accessToken = generateAuthToken(user);
     res
       .cookie("authToken", accessToken, { httpOnly: true })
       .redirect("../../api/products/list");

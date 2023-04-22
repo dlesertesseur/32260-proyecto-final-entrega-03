@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import config from "../../config/config.js";
 import CategoryDto from "../../dtos/category.dto.js";
+import categorySchema from "../../models/category.model.js";
 
 mongoose.set("strictQuery", false);
 mongoose.connect(config.MONGO_URL, { dbName: config.DB_NAME }, (error) => {
@@ -11,8 +12,8 @@ mongoose.connect(config.MONGO_URL, { dbName: config.DB_NAME }, (error) => {
 });
 
 class CategoryDao {
-  constructor(collection, schema) {
-    this.collection = mongoose.model(collection, schema);
+  constructor() {
+    this.collection = mongoose.model("categories", categorySchema);
   }
 
   async getAll() {
@@ -20,11 +21,7 @@ class CategoryDao {
       const categories = await this.collection.find().lean();
 
       const list = categories.map((cat) => {
-        return (new CategoryDto({
-          id: cat._id,
-          name: cat.name,
-          description: cat.description,
-        }));
+        return (new CategoryDto(cat));
       });
 
       return(list);
@@ -36,11 +33,7 @@ class CategoryDao {
   async findById(id) {
     try {
       const cat = await this.collection.findById(id);
-      const categoryDto = new CategoryDto({
-        id: cat._id,
-        name: cat.name,
-        description: cat.description,
-      })
+      const categoryDto = new CategoryDto(cat);
 
       return categoryDto;
     } catch (error) {
@@ -51,11 +44,7 @@ class CategoryDao {
   async create(category) {
     try {
       const cat = await this.collection.create(category);
-      const categoryDto = new CategoryDto({
-        id: cat._id,
-        name: cat.name,
-        description: cat.description,
-      })
+      const categoryDto = new CategoryDto(cat)
 
       return categoryDto;
     } catch (error) {
@@ -66,11 +55,7 @@ class CategoryDao {
   async update(id, category) {
     try {
       const cat = await this.collection.findOneAndUpdate({ _id: id }, category, {new: true,});
-      const categoryDto = new CategoryDto({
-        id: cat._id,
-        name: cat.name,
-        description: cat.description,
-      })
+      const categoryDto = new CategoryDto(cat);
 
       return categoryDto;
     } catch (error) {
@@ -81,11 +66,7 @@ class CategoryDao {
   async delete(id) {
     try {
       const cat = await this.collection.deleteOne({ _id: id });
-      const categoryDto = new CategoryDto({
-        id: cat._id,
-        name: cat.name,
-        description: cat.description,
-      })
+      const categoryDto = new CategoryDto(cat)
 
       return categoryDto;
     } catch (error) {

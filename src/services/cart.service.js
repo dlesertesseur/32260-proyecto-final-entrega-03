@@ -1,45 +1,44 @@
-import CartDao from "../persistence/nomgoDb/cart.dao.js";
-import cartSchema from "../models/cart.model.js";
+import CartRepository from "../repositories/cart.repository.js";
 
-const cartDAO = new CartDao("carts", cartSchema);
+const repository = new CartRepository();
 
 const getAllCards = async () => {
-  const ret = await cartDAO.getAll();
+  const ret = await repository.getAll();
   return ret;
 };
 
 const findCardById = async (id) => {
-  const ret = await cartDAO.findById(id);
+  const ret = await repository.findById(id);
   return ret;
 };
 
 const insertCart = async (cart) => {
-  const ret = await cartDAO.insert(cart);
+  const ret = await repository.insert(cart);
   return ret;
 };
 
 const updateCart = async (id, body) => {
-  const ret = await cartDAO.update(id, body);
+  const ret = await repository.update(id, body);
   return ret;
 };
 
 const removeCart = async (cid) => {
-  const ret = await cartDAO.remove(cid);
+  const ret = await repository.remove(cid);
   return ret;
 };
 
 const addProductToCard = async (cid, pid, quantity) => {
-  const ret = await cartDAO.addProduct(cid, pid, quantity);
+  const ret = await repository.addProduct(cid, pid, quantity);
   return ret;
 };
 
 const removeProductCart = async (cid, pid) => {
-  const ret = await cartDAO.removeProduct(cid, pid);
+  const ret = await repository.removeProduct(cid, pid);
   return ret;
 };
 
 const updateProductCart = async (cid, pid, body) => {
-  const ret = await cartDAO.updateProduct(cid, pid, body);
+  const ret = await repository.updateProduct(cid, pid, body);
   return ret;
 };
 

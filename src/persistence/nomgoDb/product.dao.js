@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
 import config from "../../config/config.js";
 import ProductDto from "../../dtos/product.dto.js";
+import productSchema from "../../models/product.model.js";
 
 mongoose.set("strictQuery", false);
 mongoose.connect(config.MONGO_URL, { dbName: config.DB_NAME }, (error) => {
@@ -12,9 +13,9 @@ mongoose.connect(config.MONGO_URL, { dbName: config.DB_NAME }, (error) => {
 });
 
 class ProductDao {
-  constructor(collection, schema) {
-    schema.plugin(mongoosePaginate);
-    this.collection = mongoose.model(collection, schema);
+  constructor() {
+    productSchema.plugin(mongoosePaginate);
+    this.collection = mongoose.model("products", productSchema);
   }
 
   async getAll(limit = 10, page = 1, sort, query = null) {
@@ -25,7 +26,9 @@ class ProductDao {
       sort: { price: sort === "asc" ? 1 : -1 },
     };
 
-    const queryParams = query ? { category: query, stock: { $gt: 0 } } : { stock: { $gt: 0 } };
+    const queryParams = query
+      ? { category: query, stock: { $gt: 0 } }
+      : { stock: { $gt: 0 } };
 
     const queryValue = query ? `&query=${query}` : "";
 
@@ -35,17 +38,7 @@ class ProductDao {
       const resp = {
         status: "success",
         payload: pagination.docs.map((prod) => {
-          return new ProductDto({
-            id: prod._id,
-            title: prod.title,
-            description: prod.description,
-            code: prod.code,
-            price: prod.price,
-            status: prod.status,
-            stock: prod.stock,
-            category: prod.category,
-            thumbnail: prod.thumbnail,
-          });
+          return new ProductDto(prod);
         }),
         totalPages: pagination.totalPages,
         prevPage: pagination.prevPage,
@@ -81,19 +74,8 @@ class ProductDao {
 
   async findById(id) {
     try {
-
-      const prod = await this.collection.findById(id);
-      const productDto = new ProductDto({
-        id: prod._id,
-        title: prod.title,
-        description: prod.description,
-        code: prod.code,
-        price: prod.price,
-        status: prod.status,
-        stock: prod.stock,
-        category: prod.category,
-        thumbnail: prod.thumbnail,
-      });
+      const prod = await this.collection.findById(id).lean();
+      const productDto = new ProductDto(prod);
 
       return productDto;
     } catch (error) {
@@ -105,19 +87,8 @@ class ProductDao {
     try {
       let prod = await this.collection.create(product);
 
-      const productDto = new ProductDto({
-        id: prod._id,
-        title: prod.title,
-        description: prod.description,
-        code: prod.code,
-        price: prod.price,
-        status: prod.status,
-        stock: prod.stock,
-        category: prod.category,
-        thumbnail: prod.thumbnail,
-      });
-      return(productDto);
-
+      const productDto = new ProductDto(prod);
+      return productDto;
     } catch (error) {
       throw error;
     }
@@ -129,18 +100,8 @@ class ProductDao {
         new: true,
       });
 
-      const productDto = new ProductDto({
-        id: prod._id,
-        title: prod.title,
-        description: prod.description,
-        code: prod.code,
-        price: prod.price,
-        status: prod.status,
-        stock: prod.stock,
-        category: prod.category,
-        thumbnail: prod.thumbnail,
-      });
-      return(productDto);
+      const productDto = new ProductDto(prod);
+      return productDto;
 
     } catch (error) {
       throw error;
@@ -149,22 +110,10 @@ class ProductDao {
 
   async delete(id) {
     try {
-      let prod = await this.collection.deleteOne({ _id: id });
+      const prod = await this.collection.deleteOne({ _id: id });
+      const productDto = new ProductDto(prod);
 
-      const productDto = new ProductDto({
-        id: prod._id,
-        title: prod.title,
-        description: prod.description,
-        code: prod.code,
-        price: prod.price,
-        status: prod.status,
-        stock: prod.stock,
-        category: prod.category,
-        thumbnail: prod.thumbnail,
-      });
-      
-      return(productDto);
-
+      return productDto;
     } catch (error) {
       throw error;
     }

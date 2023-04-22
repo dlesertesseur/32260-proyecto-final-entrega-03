@@ -1,33 +1,32 @@
-import userSchema from "../models/user.model.js";
-import UserDao from "../persistence/nomgoDb/user.dao.js";
+import UserRepository from "../repositories/user.repository.js";
 
-const dao = new UserDao("user", userSchema);
+const repository = new UserRepository();
 
 const getAllUsers = async (email) => {
-  const users = await dao.getAll(email);
+  const users = await repository.getAll(email);
   return users;
 };
 
 const findByEmail = async (email) => {
-  const user = await dao.findByEmail(email);
+  const user = await repository.findByEmail(email);
   return user;
 };
 
 const findUserById = async (id) => {
-  const user = await dao.findById(id);
+  const user = await repository.findById(id);
   return user;
 };
 
 const updateUser = async (uid, user) => {
-  await dao.update(uid, user);
+  await repository.update(uid, user);
 };
 
 const insertUser = async (uid, user) => {
-  await dao.insert(uid, user);
+  await repository.insert(uid, user);
 };
 
 const deleteUser = async (uid, user) => {
-  await dao.delete(uid, user);
+  await repository.delete(uid, user);
 };
 
 export { getAllUsers, findByEmail, findUserById, updateUser, insertUser, deleteUser };

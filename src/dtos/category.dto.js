@@ -1,9 +1,9 @@
 
 class CategoryDto
 {
-  constructor({ id, name, description })
+  constructor({ _id, name, description })
   {
-      this.id = id;
+      this.id = _id;
       this.name = name;
       this.description = description;
   }

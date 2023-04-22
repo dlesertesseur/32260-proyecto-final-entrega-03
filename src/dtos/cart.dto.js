@@ -1,6 +1,6 @@
 class CartDto {
-  constructor({ id, status, products }) {
-    this.id = id;
+  constructor({ _id, status, products }) {
+    this.id = _id;
     this.status = status;
     this.products = products;
   }

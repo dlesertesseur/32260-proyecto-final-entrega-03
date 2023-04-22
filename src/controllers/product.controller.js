@@ -29,21 +29,9 @@ const getProductsList = async (req, res) => {
 
   try {
     const data = await getAllProducts(limit, page, sort, query);
-
     const user = await findByEmail(req.user.email);
-    
-    const userData = {
-      id: user._id,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      email: user.email,
-      age: user.age,
-      role: user.role,
-      cid: user?.cart?._id
-    };
+    const params = { data: data, user: user };
 
-    const params = {data: data, user: userData};
-    
     res.render("products", {
       title: "Products",
       style: "index.css",

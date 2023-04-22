@@ -1,9 +1,9 @@
 
-class TicketDto
+class Ticket
 {
-  constructor({ _id, code, purchase_datetime, amount, purchase })
+  constructor({ id, code, purchase_datetime, amount, purchase })
   {
-      this.id = _id;
+      this.id = id.toString();
       this.code = code;
       this.purchase_datetime = purchase_datetime;
       this.amount = amount;
@@ -11,4 +11,4 @@ class TicketDto
   }
 }
 
-export default TicketDto;
+export default Ticket;

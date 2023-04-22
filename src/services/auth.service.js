@@ -1,15 +1,14 @@
-import userSchema from "../models/user.model.js";
-import UserDao from "../persistence/nomgoDb/user.dao.js";
+import UserRepository from "../repositories/user.repository.js";
 
-const dao = new UserDao("user", userSchema);
+const repository = new UserRepository();
 
 const authenticate = async (body) => {
-  const user = await dao.authenticate(body.email, body.password);
+  const user = await repository.authenticate(body.email, body.password);
   return user;
 };
 
 const registerUser = async (body) => {
-  const ret = await dao.register(body);
+  const ret = await repository.register(body);
   return ret;
 };
 

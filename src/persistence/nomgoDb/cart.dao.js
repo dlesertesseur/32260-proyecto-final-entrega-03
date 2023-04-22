@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import config from "../../config/config.js";
 import CartDto from "../../dtos/cart.dto.js";
+import cartSchema from "../../models/cart.model.js";
 
 mongoose.set("strictQuery", false);
 mongoose.connect(config.MONGO_URL, { dbName: config.DB_NAME }, (error) => {
@@ -11,18 +12,15 @@ mongoose.connect(config.MONGO_URL, { dbName: config.DB_NAME }, (error) => {
 });
 
 class CartDao {
-  constructor(collection, schema) {
-    this.collection = mongoose.model(collection, schema);
+  constructor() {
+    this.collection = mongoose.model("carts", cartSchema);
   }
 
   async getAll() {
     try {
       const carts = await this.collection.find().lean();
       const list = carts.map((cart) => {
-        return new CartDto({
-          id: cart._id,
-          status: cart.status,
-        });
+        return new CartDto(cart);
       });
 
       return list;
@@ -33,23 +31,16 @@ class CartDao {
 
   async findById(id) {
     try {
-      const cart = await this.collection.findById(id).populate("products.product").lean();
+      const cart = await this.collection
+        .findById(id)
+        .populate("products.product")
+        .lean();
 
       const cartDto = new CartDto({
         id: cart._id,
         status: cart.status,
         products: cart.products?.map((prod) => {
-          return new ProductDto({
-            id: prod.id,
-            title: prod.title,
-            description: prod.description,
-            code: prod.code,
-            price: prod.price,
-            status: prod.status,
-            stock: prod.stock,
-            category: prod.category,
-            thumbnail: prod.thumbnail,
-          });
+          return new ProductDto(prod);
         }),
       });
 
@@ -62,10 +53,7 @@ class CartDao {
   async create(payload) {
     try {
       const cart = await this.collection.create(payload);
-      const cartDto = new CartDto({
-        id: cart._id,
-        status: cart.status,
-      });
+      const cartDto = new CartDto(cart);
       return cartDto;
     } catch (error) {
       throw error;
@@ -78,11 +66,7 @@ class CartDao {
       if (cart) {
         cart.products = body;
         const ret = await this.collection.updateOne(cart);
-
-        const cartDto = new CartDto({
-          id: ret._id,
-          status: ret.status,
-        });
+        const cartDto = new CartDto(ret);
         return cartDto;
       } else {
         throw { message: "not found" };
@@ -98,11 +82,7 @@ class CartDao {
       if (cart) {
         cart.products = [];
         const ret = await this.collection.updateOne(cart);
-
-        const cartDto = new CartDto({
-          id: ret._id,
-          status: ret.status,
-        });
+        const cartDto = new CartDto(ret);
         return cartDto;
       } else {
         throw { message: "not found" };
@@ -133,10 +113,7 @@ class CartDao {
         new: true,
       });
 
-      const cartDto = new CartDto({
-        id: ret._id,
-        status: ret.status,
-      });
+      const cartDto = new CartDto(ret);
       return cartDto;
     } catch (error) {
       throw error;
@@ -161,11 +138,7 @@ class CartDao {
           new: true,
         });
 
-        cartDto = new CartDto({
-          id: ret._id,
-          status: ret.status,
-        });
-        
+        cartDto = new CartDto(cart);
       } else {
         throw { code: 404, message: `Product id: ${pid} Not Found` };
       }
@@ -192,11 +165,7 @@ class CartDao {
           new: true,
         });
 
-        cartDto = new CartDto({
-          id: ret._id,
-          status: ret.status,
-        });
-
+        cartDto = new CartDto(cart);
       } else {
         throw { code: 404, message: `Product id: ${pid} Not Found` };
       }

@@ -1,6 +1,6 @@
 <div style="font-size:30px;">Bienvenido:
-  {{params.user.first_name}}
-  {{params.user.last_name}}
+  {{params.user.firstName}}
+  {{params.user.lastName}}
   </div>
 <div style="font-size:24px; margin-top:10px">Rol: {{params.user.role}}</div>
 <div style="font-size:14px; margin-top:15px">email: {{params.user.email}}</div>
@@ -9,9 +9,9 @@
   <button onclick="logout()">Logout</button>
 </div>
 
-{{#if params.user.cid}}
+{{#if params.user.cart.id}}
   <div style="margin-top:20px">
-    <a href="/api/carts/{{params.user.cid}}" style="margin-right:20px;">
+    <a href="/api/carts/{{params.user.cart.id}}" style="margin-right:20px;">
       Ver carrito
     </a>
   </div>

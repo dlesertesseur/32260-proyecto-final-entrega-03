@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
-import { isValidPassword } from "../../util/Crypt.js";
 import config from "../../config/config.js";
 import UserDto from "../../dtos/user.dto.js";
-import CartDto from "../../dtos/cart.dto.js";
-import ProductDto from "../../dtos/product.dto.js";
+import userSchema from "../../models/user.model.js";
+import { isValidPassword } from "../../util/Crypt.js";
 
 mongoose.set("strictQuery", false);
 mongoose.connect(config.MONGO_URL, { dbName: config.DB_NAME }, (error) => {
@@ -14,8 +13,8 @@ mongoose.connect(config.MONGO_URL, { dbName: config.DB_NAME }, (error) => {
 });
 
 class UserDao {
-  constructor(collection, schema) {
-    this.collection = mongoose.model(collection, schema);
+  constructor() {
+    this.collection = mongoose.model("users", userSchema);
   }
 
   async getAll() {
@@ -23,15 +22,7 @@ class UserDao {
       users = await this.collection.find().lean();
 
       const list = users.map((user) => {
-        return new UserDto({
-          id: user._id,
-          first_name: user.first_name,
-          last_name: user.last_name,
-          email: user.email,
-          age: user.age,
-          role: user.role,
-          cart: new CartDto(user.cart),
-        });
+        return new UserDto(user);
       });
 
       return list;
@@ -43,17 +34,7 @@ class UserDao {
   async findByEmail(email) {
     try {
       let user = await this.collection.findOne({ email: email }).lean();
-
-      const userDto = new UserDto({
-        id: user._id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        age: user.age,
-        role: user.role,
-        cart: new CartDto(user.cart),
-      });
-
+      const userDto = new UserDto(user);
       return userDto;
     } catch (error) {
       throw error;
@@ -63,15 +44,7 @@ class UserDao {
   async create(data) {
     try {
       const user = await this.collection.create(data);
-      const userDto = new UserDto({
-        id: user._id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        age: user.age,
-        role: user.role,
-        cart: new CartDto(user.cart),
-      });
+      const userDto = new UserDto(user);
       return userDto;
     } catch (error) {
       throw error;
@@ -84,15 +57,7 @@ class UserDao {
         new: true,
       });
 
-      const userDto = new UserDto({
-        id: user._id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        age: user.age,
-        role: user.role,
-        cart: new CartDto(user.cart),
-      });
+      const userDto = new UserDto(user);
       return userDto;
     } catch (error) {
       throw error;
@@ -103,15 +68,7 @@ class UserDao {
     try {
       const user = await this.collection.deleteOne({ _id: id });
 
-      const userDto = new UserDto({
-        id: user._id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        age: user.age,
-        role: user.role,
-        cart: new CartDto(user.cart),
-      });
+      const userDto = new UserDto(user);
       return userDto;
     } catch (error) {
       throw error;
@@ -120,18 +77,9 @@ class UserDao {
 
   async authenticate(email, password) {
     try {
-      let user = await this.findByEmail(email);
-      if (user) {
-        if (isValidPassword(user, password)) {
-          const userDto = new UserDto({
-            id: user._id,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            email: user.email,
-            age: user.age,
-            role: user.role,
-            cart: new CartDto(user.cart),
-          });
+      let userDto = await this.findByEmail(email);
+      if (userDto) {
+        if (isValidPassword(userDto, password)) {
           return userDto;
         } else {
           throw { status: 401, message: "Unauthorized - password error" };
@@ -184,19 +132,10 @@ class UserDao {
   // }
 
   async findById(id) {
-    let cart = null;
     try {
       const user = await this.collection.findById(id).lean();
 
-      const userDto = new UserDto({
-        id: user._id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        age: user.age,
-        role: user.role,
-        cart: cart._id,
-      });
+      const userDto = new UserDto(user);
       
       return userDto;
     } catch (error) {
@@ -211,15 +150,7 @@ class UserDao {
         throw { status: 409, message: "Conflict - User email already exists" };
       } else {
         const user = await this.collection.create(user);
-        const userDto = new UserDto({
-          id: user._id,
-          first_name: user.first_name,
-          last_name: user.last_name,
-          email: user.email,
-          age: user.age,
-          role: user.role,
-          cart: new CartDto(user.cart),
-        });
+        const userDto = new UserDto(user);
         return userDto;
       }
     } catch (error) {
