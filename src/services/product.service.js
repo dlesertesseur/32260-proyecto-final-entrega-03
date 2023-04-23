@@ -2,7 +2,7 @@ import ProductRepository from "../repositories/product.repository.js";
 
 const repository = new ProductRepository();
 
-const getAllProducts = async (limit, page, sort, query) => {
+const getAllProducts = async (limit = 10, page = 1, sort, query = null) => {
   let ret = await repository.getAll(limit, page, sort, query);
   return ret;
 };

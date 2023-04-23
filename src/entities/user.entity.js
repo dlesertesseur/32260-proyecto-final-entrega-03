@@ -10,7 +10,7 @@ class User
       this.email = userDto.email,
       this.age = userDto.age,
       this.role = userDto.role,
-      this.cart = new Cart(userDto.cart);
+      this.cart = userDto?.cart ? new Cart(userDto.cart) : null;
   }
 
   getFullName()

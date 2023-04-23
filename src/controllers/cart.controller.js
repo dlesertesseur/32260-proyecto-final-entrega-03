@@ -7,6 +7,7 @@ import {
   addProductToCard,
   updateProductCart,
   removeProductCart,
+  purchaseItems,
 } from "../services/cart.service.js";
 import { findUserById } from "../services/user.service.js";
 
@@ -34,7 +35,6 @@ const getAll = async (req, res) => {
 
 const insert = async (req, res) => {
   try {
-
     console.log("cart. controller -> insert user id", req.user.id);
     const newCart = { ...req.body };
     const cart = await insertCart(newCart);
@@ -145,6 +145,22 @@ const updateProduct = async (req, res) => {
   }
 };
 
+const purchase = async (req, res) => {
+  const cid = req.params.cid;
+  const user = req.user;
+
+  if (cid) {
+    try {
+      const purchaseData = await purchaseItems(user, cid);
+      res.send(purchaseData);
+    } catch (error) {
+      res.status(error.code).send({ message: error.message });
+    }
+  } else {
+    res.status(400).send({ message: "Bad request" });
+  }
+};
+
 export {
   getAll,
   findById,
@@ -155,4 +171,5 @@ export {
   removeProduct,
   updateProduct,
   getCartsList,
+  purchase,
 };

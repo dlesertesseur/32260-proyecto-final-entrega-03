@@ -1,4 +1,4 @@
-<h2>Lista de produtos en el Carrito: {{cart._id}}</h2>
+<h2>Lista de produtos en el Carrito: {{cart.id}}</h2>
 
 <table>
   <tr>
@@ -25,11 +25,16 @@
       <td>{{product.thumbnail}}</td>
       <td>{{quantity}}</td>
       <td>
-        <button onclick="removeProductCart('{{../cart._id}}','{{this.product._id}}')">Eliminar</button>
+        <button onclick="removeProductCart('{{../cart.id}}','{{this.product.id}}')">Eliminar</button>
       </td>
     </tr>
   {{/each}}
 </table>
 
+{{#if cart.products}}
+  <div style="margin-top:20px">
+    <button onclick="purchase('{{cart.id}}')">Purchase</button>
+  </div>
+{{/if}}
 <script src="/js/index.js"></script>
 

@@ -1,3 +1,4 @@
+
 import config from "../config/config.js";
 import Product from "../entities/product.entity.js";
 import ProductDaoFactory from "../factories/product.dao.factory.js";
@@ -7,8 +8,8 @@ class ProductRepository {
     this.dao = ProductDaoFactory.create(config.PERSISTENCE);
   }
 
-  async getAll(limit = 10, page = 1, sort, query = null) {
-    const products = await this.dao.getAll(limit = 10, page = 1, sort, query = null);
+  async getAll(limit, page, sort, query) {
+    const products = await this.dao.getAll(limit, page, sort, query);
     const list = products.payload?.map(product => new Product(product));
     products.payload = list;
     return(products);

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import config from "../../config/config.js";
 import TicketDto from "../../dtos/ticket.dto.js";
 import ticketSchema from "../../models/ticket.model.js";
+import config from "../../config/config.js";
 
 mongoose.set("strictQuery", false);
 mongoose.connect(config.MONGO_URL, { dbName: config.DB_NAME }, (error) => {
@@ -40,22 +40,26 @@ class TicketDao {
     }
   }
 
-  async create(category) {
+  async create(body) {
     try {
-      const ticket = await this.collection.create(category);
+      const ticket = await this.collection.create(body);
       const ticketDto = new TicketDto(ticket);
       return ticketDto;
     } catch (error) {
+      console.log("Ticket create ->", error);
       throw error;
     }
   }
 
   async update(id, category) {
     try {
-      const ticket = await this.collection.findOneAndUpdate({ _id: id }, category, { new: true });
+      const ticket = await this.collection.findOneAndUpdate(
+        { _id: id },
+        category,
+        { new: true }
+      );
       const ticketDto = new TicketDto(ticket);
       return ticketDto;
-
     } catch (error) {
       console.log(error);
     }
@@ -66,7 +70,6 @@ class TicketDao {
       const ticket = await this.collection.deleteOne({ _id: id });
       const ticketDto = new TicketDto(ticket);
       return ticketDto;
-
     } catch (error) {
       console.log(error);
     }

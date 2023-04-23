@@ -34,6 +34,7 @@ const addProductToCart = async (cid, pid) => {
 };
 
 const removeProductCart = async (cid, pid) => {
+  // console.log(`removeProductCart -> /api/carts/${cid}/products/${pid}`);
   await fetch(`/api/carts/${cid}/products/${pid}`, {
     method: "DELETE",
     mode: "cors",
@@ -72,5 +73,23 @@ const createCart = async ( uid ) => {
     .then((res) => res.json())
     .then((data) => {
       location.reload();
+    });
+};
+
+const purchase = async ( cid ) => {
+  await fetch(`/api/carts/${cid}/purchase`, {
+    method: "POST",
+    mode: "cors",
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      location.reload();
+
+      // const url = location.href + "/tickets/" + data.ticket.id;
+      // location.assign(url);
     });
 };

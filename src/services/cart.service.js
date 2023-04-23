@@ -1,4 +1,7 @@
 import CartRepository from "../repositories/cart.repository.js";
+import ProductRepository from "../repositories/product.repository.js";
+import TicketRepository from "../repositories/ticket.repository.js";
+import { nanoid } from "nanoid/non-secure";
 
 const repository = new CartRepository();
 
@@ -42,6 +45,56 @@ const updateProductCart = async (cid, pid, body) => {
   return ret;
 };
 
+const purchaseItems = async (user, cid) => {
+  const productsToPurchase = [];
+  const productsWithoutStock = [];
+  const productRepository = new ProductRepository();
+  const ticketRepository = new TicketRepository();
+ 
+  let amount = 0;
+  const cart = await repository.findById(cid);
+  const productsInCart = cart.products;
+
+  //Check product stock.
+  productsInCart.forEach((productInCart) => {
+    if (productInCart.product.stock >= productInCart.quantity) {
+      productsToPurchase.push(productInCart);
+    }else{
+      productsWithoutStock.push(productInCart);
+    }
+  });
+
+  //Process
+  for (let i = 0; i < productsToPurchase.length; i++) {
+    const productInCart = productsToPurchase[i];
+
+    //Calculate ticket amount
+    amount += productInCart.product.price * productInCart.quantity;
+
+    //Remove product from cart and update stock.
+    await repository.removeProduct(cid, productInCart.product.id);
+
+    //Update stock
+    productInCart.product.stock = productInCart.product.stock - productInCart.quantity;
+    await productRepository.update(
+      productInCart.product.id,
+      productInCart.product
+    );
+  }
+
+  //Create ticket.
+  const payload = {
+    code: nanoid(),
+    amount: amount,
+    purchaser: user.email,
+  };
+  const ticket = await ticketRepository.create(payload);
+
+  const ret = {ticket: ticket, productsWithoutStock:productsWithoutStock};
+
+  return ret;
+};
+
 export {
   getAllCards,
   findCardById,
@@ -51,4 +104,5 @@ export {
   addProductToCard,
   updateProductCart,
   removeProductCart,
+  purchaseItems,
 };

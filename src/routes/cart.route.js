@@ -9,6 +9,7 @@ import {
   removeProduct,
   updateProduct,
   getCartsList,
+  purchase,
 } from "../controllers/cart.controller.js";
 import { Router } from "express";
 import { roleUserValidation } from "../middlewares/index.js";
@@ -36,10 +37,19 @@ cartRoute.post(
   passport.authenticate("current", { session: false }),
   insert
 );
+
 cartRoute.post(
   "/:cid/products/:pid",
-  passport.authenticate("current", roleUserValidation, { session: false }),
+  passport.authenticate("current", { session: false }),
+  roleUserValidation,
   addProduct
+);
+
+cartRoute.post(
+  "/:cid/purchase",
+  passport.authenticate("current", { session: false }),
+  roleUserValidation,
+  purchase
 );
 
 cartRoute.put(
@@ -47,6 +57,7 @@ cartRoute.put(
   passport.authenticate("current", { session: false }),
   update
 );
+
 cartRoute.put(
   "/:cid/products/:pid",
   passport.authenticate("current", { session: false }),
@@ -59,6 +70,7 @@ cartRoute.delete(
   passport.authenticate("current", { session: false }),
   remove
 );
+
 cartRoute.delete(
   "/:cid/products/:pid",
   passport.authenticate("current", { session: false }),

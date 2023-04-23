@@ -46,9 +46,9 @@
       <td>{{category}}</td>
       <td>{{thumbnail}}</td>
       
-      {{#if ../params.user.cid}}
+      {{#if ../params.user.cart.id}}
           <td>
-            <button onclick="addProductToCart('{{../params.user.cid}}','{{this._id}}')">Agregar producto</button>
+            <button onclick="addProductToCart('{{../params.user.cart.id}}','{{this.id}}')">Agregar producto</button>
           </td>
       {{/if}}
 

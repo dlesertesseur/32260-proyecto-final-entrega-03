@@ -6,8 +6,8 @@ import jwt from "passport-jwt";
 import { authenticate, registerUser } from "../services/auth.service.js";
 import { findByEmail } from "../services/user.service.js";
 import { createHash } from "../util/Crypt.js";
-import config from "./config.js";
 import { getRoleByUser } from "../util/Validator.js";
+import config from "./config.js";
 
 const LocalStrategy = local.Strategy;
 const JWTStrategy = jwt.Strategy;

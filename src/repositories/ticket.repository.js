@@ -1,7 +1,8 @@
+import config from "../config/config.js";
 import Ticket from "../entities/ticket.entity.js";
 import TicketDaoFactory from "../factories/ticket.dao.factory.js";
 
-class TicketDao {
+class TicketRepository {
   constructor() {
     this.dao = TicketDaoFactory.create(config.PERSISTENCE);
   }
@@ -37,4 +38,4 @@ class TicketDao {
   }
 }
 
-export default TicketDao;
+export default TicketRepository;

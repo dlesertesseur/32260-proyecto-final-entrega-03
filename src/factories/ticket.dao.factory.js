@@ -1,4 +1,4 @@
-import TicketDao from "../repositories/ticket.repository.js";
+import TicketDao from "../persistence/nomgoDb/ticket.dao.js";
 
 const daos = {
   fileSystem: null,
