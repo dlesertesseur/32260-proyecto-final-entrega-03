@@ -11,9 +11,13 @@ const config = {
   CALLBACK_URL: process.env.CALLBACK_URL,
   ADMIN_EMAIL: process.env.ADMIN_EMAIL,
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
-  PERSISTENCE:process.env.PERSISTENCE,
-  ADMIN_ROLE : "admin",
-  USER_ROLE : "user",
+  PERSISTENCE: process.env.PERSISTENCE,
+  ADMIN_ROLE: "admin",
+  USER_ROLE: "user",
+  EMAIL_APP: process.env.EMAIL_APP,
+  EMAIL_APP_PASSWORD: process.env.EMAIL_APP_PASSWORD,
+  EMAIL_APP_PORT:process.env.EMAIL_APP_PORT,
+  EMAIL_APP_SERVICE:process.env.EMAIL_APP_SERVICE
 };
 
 export default config;

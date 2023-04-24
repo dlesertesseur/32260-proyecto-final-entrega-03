@@ -1,6 +1,7 @@
 import CartRepository from "../repositories/cart.repository.js";
 import ProductRepository from "../repositories/product.repository.js";
 import TicketRepository from "../repositories/ticket.repository.js";
+import sendMail from "./mail.service.js";
 import { nanoid } from "nanoid/non-secure";
 
 const repository = new CartRepository();
@@ -50,7 +51,7 @@ const purchaseItems = async (user, cid) => {
   const productsWithoutStock = [];
   const productRepository = new ProductRepository();
   const ticketRepository = new TicketRepository();
- 
+
   let amount = 0;
   const cart = await repository.findById(cid);
   const productsInCart = cart.products;
@@ -59,7 +60,7 @@ const purchaseItems = async (user, cid) => {
   productsInCart.forEach((productInCart) => {
     if (productInCart.product.stock >= productInCart.quantity) {
       productsToPurchase.push(productInCart);
-    }else{
+    } else {
       productsWithoutStock.push(productInCart);
     }
   });
@@ -75,7 +76,8 @@ const purchaseItems = async (user, cid) => {
     await repository.removeProduct(cid, productInCart.product.id);
 
     //Update stock
-    productInCart.product.stock = productInCart.product.stock - productInCart.quantity;
+    productInCart.product.stock =
+      productInCart.product.stock - productInCart.quantity;
     await productRepository.update(
       productInCart.product.id,
       productInCart.product
@@ -90,7 +92,12 @@ const purchaseItems = async (user, cid) => {
   };
   const ticket = await ticketRepository.create(payload);
 
-  const ret = {ticket: ticket, productsWithoutStock:productsWithoutStock};
+  const ret = { ticket: ticket, productsWithoutStock: productsWithoutStock };
+
+  const subject = `TICKET CODE:${ticket.code}`;
+  const body = `<h2>TICKET CODE : ${ticket.code}</h2> <h3>FECHA:${ticket.purchase_datetime} <h3> <h3>TOTAL: $ ${ticket.amount} <h3>`;
+  
+  await sendMail(ticket.purchaser, subject, body);
 
   return ret;
 };
