@@ -5,6 +5,7 @@ import {
   insertUser,
   updateUser,
   deleteUser,
+  addCartToUser
 } from "../services/user.service.js";
 
 const getAll = async (req, res) => {
@@ -71,10 +72,7 @@ const addCart = async (req, res) => {
 
   if (uid) {
     try {
-      const user = await findUserById(uid);
-      const cart = await insertCart();
-      user.cart = cart;
-      await updateUser(user._id, user); 
+      const user = addCartToUser(uid);
       res.send(user);
     } catch (error) {
       console.log(error);

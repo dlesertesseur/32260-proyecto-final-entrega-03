@@ -17,7 +17,7 @@ const findCardById = async (id) => {
 };
 
 const insertCart = async (cart) => {
-  const ret = await repository.insert(cart);
+  const ret = await repository.create(cart);
   return ret;
 };
 
@@ -61,7 +61,7 @@ const purchaseItems = async (user, cid) => {
     if (productInCart.product.stock >= productInCart.quantity) {
       productsToPurchase.push(productInCart);
     } else {
-      productsWithoutStock.push(productInCart);
+      productsWithoutStock.push(productInCart.product.id);
     }
   });
 
@@ -92,7 +92,8 @@ const purchaseItems = async (user, cid) => {
   };
   const ticket = await ticketRepository.create(payload);
 
-  const ret = { ticket: ticket, productsWithoutStock: productsWithoutStock };
+  //const ret = { ticket: ticket, productsWithoutStock: productsWithoutStock };
+  const ret = productsWithoutStock;
 
   const subject = `TICKET CODE:${ticket.code}`;
   const body = `<h2>TICKET CODE : ${ticket.code}</h2> <h3>FECHA:${ticket.purchase_datetime} <h3> <h3>TOTAL: $ ${ticket.amount} <h3>`;

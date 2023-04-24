@@ -33,8 +33,12 @@ class UserDao {
 
   async findByEmail(email) {
     try {
-      let user = await this.collection.findOne({ email: email }).lean();
-      const userDto = new UserDto(user);
+      let userDto = null;
+      const user = await this.collection.findOne({ email: email }).lean();
+      if(user){
+        userDto = new UserDto(user);
+      }
+      
       return userDto;
     } catch (error) {
       throw error;
@@ -143,13 +147,13 @@ class UserDao {
     }
   }
 
-  async register(user) {
+  async register(payload) {
     try {
-      let userFound = await this.findByEmail(user.email);
+      let userFound = await this.findByEmail(payload.email);
       if (userFound) {
         throw { status: 409, message: "Conflict - User email already exists" };
       } else {
-        const user = await this.collection.create(user);
+        const user = await this.collection.create(payload);
         const userDto = new UserDto(user);
         return userDto;
       }

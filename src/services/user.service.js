@@ -29,4 +29,9 @@ const deleteUser = async (uid, user) => {
   await repository.delete(uid, user);
 };
 
-export { getAllUsers, findByEmail, findUserById, updateUser, insertUser, deleteUser };
+const addCartToUser = async (uid) => {
+  const user = await repository.addCartToUser(uid);
+  return(user)
+}
+
+export { getAllUsers, findByEmail, findUserById, updateUser, insertUser, deleteUser, addCartToUser };
