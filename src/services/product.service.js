@@ -14,13 +14,11 @@ const findProductById = async (id) => {
 };
 
 const insertProduct = async (product) => {
-  console.log("insertProduct -> ");
-  let ret = await repository.insert(product);
+  let ret = await repository.create(product);
   return ret;
 };
 
 const updateProduct = async (pid, body) => {
-  console.log("updateProduct -> ");
   let ret = await repository.update(pid, body);
   return ret;
 };

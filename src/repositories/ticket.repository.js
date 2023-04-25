@@ -32,9 +32,8 @@ class TicketRepository {
   }
 
   async delete(id) {
-    const ticket = await this.dao.delete(id);
-    const entity = new Ticket(ticket);
-    return entity;
+    await this.dao.delete(id);
+    return(id);
   }
 }
 

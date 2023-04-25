@@ -32,9 +32,8 @@ class CategoryRepository {
   }
 
   async delete(id) {
-    const cat = await this.dao.delete(id);
-    const entity = new Category(cat);
-    return entity;
+    await this.dao.delete(id);
+    return (id);
   }
 }
 

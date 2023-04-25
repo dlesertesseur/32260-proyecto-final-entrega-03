@@ -26,6 +26,7 @@ cartRoute.get(
   passport.authenticate("current", { session: false }),
   getCartsList
 );
+
 cartRoute.get(
   "/:cid",
   passport.authenticate("current", { session: false }),
@@ -35,6 +36,7 @@ cartRoute.get(
 cartRoute.post(
   "/",
   passport.authenticate("current", { session: false }),
+  roleUserValidation,
   insert
 );
 
@@ -55,6 +57,7 @@ cartRoute.post(
 cartRoute.put(
   "/:cid/",
   passport.authenticate("current", { session: false }),
+  roleUserValidation,
   update
 );
 
