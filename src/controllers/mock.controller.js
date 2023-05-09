@@ -12,10 +12,11 @@ const mockingproducts = async (req, res) => {
           title : faker.commerce.product(),
           description: faker.commerce.productDescription(),
           code: faker.random.alphaNumeric(5),
-          price: faker.commerce.price(100, 200, 0),
-          stock : faker.random.numeric(4, { allowLeadingZeros: true }) ,
+          price: Number(faker.commerce.price(100, 200, 0)),
+          stock : Number(faker.random.numeric(4, { allowLeadingZeros: true })) ,
           category: faker.commerce.department(),
           thumbnail:[faker.image.food()],
+          status:"true"
         });
         products.push(product);
       }
