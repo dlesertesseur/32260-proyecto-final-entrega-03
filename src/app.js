@@ -11,10 +11,12 @@ import productRoute from "./routes/products.route.js";
 import sessionsRoute from "./routes/session.route.js";
 import initializePassport from "./config/passport.config.js";
 import userRoute from "./routes/user.route.js";
+import mockRoute from "./routes/mock.route.js";
 import cookieParser from "cookie-parser";
 import config from "./config/config.js";
-
+import errorHandler from "./middlewares/errors/index.js";
 import { Command } from "commander";
+
 const program = new Command();
 
 /*Terminar*/
@@ -62,10 +64,13 @@ app.use("/api/products", productRoute);
 app.use("/api/categories", categoryRoute);
 app.use("/api/sessions", sessionsRoute);
 app.use("/api/user", userRoute);
+app.use("/api/mockingproducts", mockRoute);
+app.use(errorHandler);
 
 app.use("/", (req, res) => {
   res.redirect("/api/auth/login");
 });
+
 
 const httpServer = app.listen(config.PORT, () => {
   console.log(`Server running on port: ${httpServer.address().port}`);

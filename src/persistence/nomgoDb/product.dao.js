@@ -73,10 +73,14 @@ class ProductDao {
   }
 
   async findById(id) {
+    let productDto = null;
+
     try {
       const prod = await this.collection.findById(id).lean();
-      const productDto = new ProductDto(prod);
-
+      if(prod){
+        productDto = new ProductDto(prod);
+      }
+      
       return productDto;
     } catch (error) {
       throw error;
@@ -90,6 +94,7 @@ class ProductDao {
       const productDto = new ProductDto(prod);
       return productDto;
     } catch (error) {
+      console.log("error", error)
       throw error;
     }
   }

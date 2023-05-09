@@ -5,7 +5,7 @@ import {
   update,
   insert,
   remove,
-  getProductsList,
+  getProductsList
 } from "../controllers/product.controller.js";
 import { Router } from "express";
 import { roleAdminValidation } from "../middlewares/index.js";
@@ -17,6 +17,7 @@ productRoute.get(
   passport.authenticate("current", { session: false }),
   getAll
 );
+
 productRoute.get(
   "/list",
   passport.authenticate("current", { session: false }),

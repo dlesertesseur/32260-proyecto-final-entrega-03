@@ -16,8 +16,11 @@ class ProductRepository {
   }
 
   async findById(id) {
+    let entity = null;
     const product = await this.dao.findById(id);
-    const entity = new Product(product);
+    if(product){
+      entity = new Product(product);
+    }
     return(entity);
   }
 

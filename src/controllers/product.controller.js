@@ -1,3 +1,6 @@
+import CustomError from "../services/errors/CustomError.js";
+import { EErrors } from "../services/errors/enums.js";
+import { generateProductErrorInfo } from "../services/errors/errorInfo.js";
 import {
   getAllProducts,
   findProductById,
@@ -6,6 +9,7 @@ import {
   deleteProduct,
 } from "../services/product.service.js";
 import { findByEmail } from "../services/user.service.js";
+import { z } from "zod";
 
 const getAll = async (req, res) => {
   const limit = req.query.limit;
@@ -47,19 +51,58 @@ const findById = async (req, res) => {
 
   try {
     const product = await findProductById(pid);
-    res.send(product);
+    if (product) {
+      res.send(product);
+    } else {
+      res
+        .status(404)
+        .send({ message: "product with id " + pid + " not found " });
+    }
   } catch (error) {
-    res.status(404).send({ message: error.message });
+    res.status(500).send({ message: error.message });
   }
 };
 
-const insert = async (req, res) => {
-  let product = null;
+// const insert = async (req, res) => {
+//   let product = null;
+//   try {
+//     product = await insertProduct(req.body);
+//     res.send(product);
+//   } catch (error) {
+//     res.status(500).send({ message: error.message });
+//   }
+// };
+
+const insert = async (req, res, next) => {
   try {
-    product = await insertProduct(req.body);
-    res.send(product);
+
+    /*Validation definitions*/
+    const validate = z.object({
+      title: z.string(),
+      description: z.string(),
+      code: z.string(),
+      price: z.number(),
+      status: z.string(),
+      stock: z.number(),
+      category: z.string(),
+      thumbnail: z.string().array(),
+    });
+
+    /*Evaluate payload*/
+    const payload = validate.safeParse(req.body);
+    if (payload.success) {
+      const product = await insertProduct(payload.data);
+      res.send(product);
+    } else {
+      CustomError.createError({
+        name: "Product creation error",
+        cause: generateProductErrorInfo(req.body),
+        message: "Error traing to create product",
+        code: EErrors.INVALID_TYPE_ERROR,
+      });
+    }
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    next(error);
   }
 };
 
@@ -92,4 +135,5 @@ const remove = async (req, res) => {
     res.status(400).send({ message: "Bad request" });
   }
 };
+
 export { getAll, findById, update, insert, remove, getProductsList };
