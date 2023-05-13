@@ -8,6 +8,7 @@ import { findByEmail } from "../services/user.service.js";
 import { createHash } from "../util/Crypt.js";
 import { getRoleByUser } from "../util/Validator.js";
 import config from "./config.js";
+import { logger } from "../logger/index.js";
 
 const LocalStrategy = local.Strategy;
 const JWTStrategy = jwt.Strategy;
@@ -80,7 +81,7 @@ const initializePassport = () => {
         try {
           return done(null, jwt_payload);
         } catch (error) {
-          console.log("JWTStrategy -> error", error)
+          logger.error("JWTStrategy " + error);
           return done(error);
         }
       }

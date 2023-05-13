@@ -20,6 +20,7 @@ const getCartsList = async (req, res) => {
       carts,
     });
   } catch (error) {
+    req.logger.error(error.message);
     res.status(500).send({ message: error.message });
   }
 };
@@ -29,13 +30,14 @@ const getAll = async (req, res) => {
     const carts = await getAllCards();
     res.send(carts);
   } catch (error) {
+    req.logger.error(error.message);
     res.status(500).send({ message: error.message });
   }
 };
 
 const insert = async (req, res) => {
   try {
-    console.log("cart. controller -> insert user id", req.user.id);
+    req.logger.info("cart. controller -> insert user id " + req.user.id);
     const newCart = { ...req.body };
     const cart = await insertCart(newCart);
 
@@ -44,6 +46,7 @@ const insert = async (req, res) => {
 
     res.send(cart);
   } catch (error) {
+    req.logger.error(error.message);
     res.status(500).send({ message: error.message });
   }
 };
@@ -54,6 +57,7 @@ const update = async (req, res) => {
     const cart = await updateCart(cid, req.body);
     res.send(cart);
   } catch (error) {
+    req.logger.error(error.message);
     res.status(500).send({ message: error.message });
   }
 };
@@ -65,9 +69,11 @@ const remove = async (req, res) => {
       const cart = await removeCart(cid);
       res.send(cart);
     } catch (error) {
+      req.logger.error(error.message);
       res.status(500).send({ message: error.message });
     }
   } else {
+    req.logger.error("Bad request");
     res.status(400).send({ message: "Bad request" });
   }
 };
@@ -83,9 +89,11 @@ const findById = async (req, res) => {
         cart,
       });
     } catch (error) {
+      req.logger.error(error.message);
       res.status(500).send({ message: error.message });
     }
   } else {
+    req.logger.error("Bad request");
     res.status(400).send({ message: "Bad request" });
   }
 };
@@ -101,9 +109,11 @@ const addProduct = async (req, res) => {
       cart = await addProductToCard(cid, pid, quantity);
       res.send(cart);
     } catch (error) {
+      req.logger.error(error.message);
       res.status(500).send({ message: error.message });
     }
   } else {
+    req.logger.error("Bad request");
     res.status(400).send({ message: "Bad request" });
   }
 };
@@ -118,9 +128,11 @@ const removeProduct = async (req, res) => {
       cart = await removeProductCart(cid, pid);
       res.send(cart);
     } catch (error) {
+      req.logger.error(error.message);
       res.status(500).send({ message: error.message });
     }
   } else {
+    req.logger.error("Bad request");
     res.status(400).send({ message: "Bad request" });
   }
 };
@@ -131,16 +143,17 @@ const updateProduct = async (req, res) => {
   const pid = req.params.pid;
   const body = req.body;
 
-  console.log("cart.controller -> updateProduct", cid, pid, body);
-
   if (cid && pid) {
+    req.logger.debug("cart.controller -> updateProduct cid:" + cid);
     try {
       cart = await updateProductCart(cid, pid, body);
       res.send(cart);
     } catch (error) {
+      req.logger.error(error.message);
       res.status(error.code).send({ message: error.message });
     }
   } else {
+    req.logger.error("Bad request");
     res.status(400).send({ message: "Bad request" });
   }
 };
@@ -154,9 +167,11 @@ const purchase = async (req, res) => {
       const purchaseData = await purchaseItems(user, cid);
       res.send(purchaseData);
     } catch (error) {
+      req.logger.error(error.message);
       res.status(error.code).send({ message: error.message });
     }
   } else {
+    req.logger.error("Bad request");
     res.status(400).send({ message: "Bad request" });
   }
 };

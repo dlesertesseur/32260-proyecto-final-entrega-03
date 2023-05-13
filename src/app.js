@@ -15,7 +15,9 @@ import mockRoute from "./routes/mock.route.js";
 import cookieParser from "cookie-parser";
 import config from "./config/config.js";
 import errorHandler from "./middlewares/errors/index.js";
+import loggerRoute from "./routes/logger.route.js";
 import { Command } from "commander";
+import { addLogger, logger } from "./logger/index.js";
 
 const program = new Command();
 
@@ -23,7 +25,6 @@ const program = new Command();
 program.option('--persistence <mode>', 'Presistence type <moongose || filesystem>', "moongose");
 program.parse(process.argv);
 config.PERSISTENCE = program.opts().persistence;
-console.log("PERSISTENCE MODE :", config.PERSISTENCE);
 
 const mongoStore = MongoStore.create({
   mongoUrl: config.MONGO_URL,
@@ -48,6 +49,8 @@ app.use(
 
 app.use(cookieParser());
 
+app.use(addLogger);
+
 /*Inicializa la configuracion de passport */
 initializePassport();
 
@@ -65,6 +68,7 @@ app.use("/api/categories", categoryRoute);
 app.use("/api/sessions", sessionsRoute);
 app.use("/api/user", userRoute);
 app.use("/api/mockingproducts", mockRoute);
+app.use("/api/loggerTest", loggerRoute);
 app.use(errorHandler);
 
 app.use("/", (req, res) => {
@@ -73,6 +77,6 @@ app.use("/", (req, res) => {
 
 
 const httpServer = app.listen(config.PORT, () => {
-  console.log(`Server running on port: ${httpServer.address().port}`);
+  logger.info(`Server running on port: ${httpServer.address().port}`);
 });
-httpServer.on("error", (error) => console.log("Server error -> ", error));
+httpServer.on("error", (error) => logger.fatal("Server error -> ", error));

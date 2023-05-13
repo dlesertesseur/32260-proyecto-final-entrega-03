@@ -28,7 +28,6 @@ const loginPassport = async (req, res) => {
       .cookie("authToken", accessToken, { httpOnly: true })
       .redirect("../../api/products/list");
   } catch (error) {
-    console.log("loginPassport -> ", error);
     throw error;
   }
 };

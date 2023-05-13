@@ -59,7 +59,7 @@ const remove = async (req, res) => {
       const user = await deleteUser(pid);
       res.send(user);
     } catch (error) {
-      console.log(error)
+      req.logger.error(error);
       res.status(500).send({ message: error.message });
     }
   } else {
@@ -75,7 +75,7 @@ const addCart = async (req, res) => {
       const user = addCartToUser(uid);
       res.send(user);
     } catch (error) {
-      console.log(error);
+      req.logger.error(error);
       res.status(500).send({ message: error.message });
     }
   } else {

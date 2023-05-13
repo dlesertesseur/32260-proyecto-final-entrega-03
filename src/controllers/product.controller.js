@@ -51,6 +51,7 @@ const findById = async (req, res) => {
 
   try {
     const product = await findProductById(pid);
+    req.logger.debug("findProductById -> " + pid);
     if (product) {
       res.send(product);
     } else {
@@ -62,16 +63,6 @@ const findById = async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
-
-// const insert = async (req, res) => {
-//   let product = null;
-//   try {
-//     product = await insertProduct(req.body);
-//     res.send(product);
-//   } catch (error) {
-//     res.status(500).send({ message: error.message });
-//   }
-// };
 
 const insert = async (req, res, next) => {
   try {

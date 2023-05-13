@@ -3,11 +3,12 @@ import config from "../../config/config.js";
 import UserDto from "../../dtos/user.dto.js";
 import userSchema from "../../models/user.model.js";
 import { isValidPassword } from "../../util/Crypt.js";
+import { logger } from "../../logger/index.js";
 
 mongoose.set("strictQuery", false);
 mongoose.connect(config.MONGO_URL, { dbName: config.DB_NAME }, (error) => {
   if (error) {
-    console.log("Cannot connect to db");
+    logger.fatal("UserDao -> Cannot connect to db");
     process.exit();
   }
 });
@@ -95,45 +96,6 @@ class UserDao {
       throw error;
     }
   }
-
-  // async findById(id) {
-  //   let cart = null;
-  //   try {
-  //     const user = await this.collection.findById(id).populate("cart").lean();
-
-  //     if (user?.cart) {
-  //       cart = {
-  //         id: cart._id,
-  //         products: cart.products?.map((prod) => {
-  //           return new ProductDto({
-  //             id: prod.id,
-  //             title: prod.title,
-  //             description: prod.description,
-  //             code: prod.code,
-  //             price: prod.price,
-  //             status: prod.status,
-  //             stock: prod.stock,
-  //             category: prod.category,
-  //             thumbnail: prod.thumbnail,
-  //           });
-  //         }),
-  //       };
-  //     }
-
-  //     const userDto = new UserDto({
-  //       id: user._id,
-  //       first_name: user.first_name,
-  //       last_name: user.last_name,
-  //       email: user.email,
-  //       age: user.age,
-  //       role: user.role,
-  //       cart: new CartDto(cart),
-  //     });
-  //     return userDto;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
 
   async findById(id) {
     try {

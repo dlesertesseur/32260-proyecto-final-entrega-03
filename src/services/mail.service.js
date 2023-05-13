@@ -1,5 +1,6 @@
 import config from "../config/config.js";
 import nodemailer from "nodemailer";
+import { logger } from "../logger/index.js";
 
 const gmailConfig = {
   service: config.EMAIL_APP_SERVICE,
@@ -22,10 +23,10 @@ const sendMail = async (to, subject, body) => {
   };
 
   try {
-    const response = await transporter.sendMail(mailContent);
-    console.log("sendMail -> response ", response);
+    await transporter.sendMail(mailContent);
+    logger.debug("sendMail to: " + to);
   } catch (error) {
-    console.log("sendMail -> error ", error);
+    logger.error("sendMail -> error " + error);
   }
 };
 

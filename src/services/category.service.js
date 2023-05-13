@@ -8,19 +8,16 @@ const getAllCategories = async () => {
 };
 
 const findCategoryById = async (id) => {
-  console.log("findCategoryById -> ", id);
   let ret = await repository.findById(id);
   return ret;
 };
 
 const insertCategory = async (category) => {
-  console.log("insertCategory -> ");
   let ret = await repository.insert(category);
   return ret;
 };
 
 const updateCategory = async (pid, body) => {
-  console.log("updateCategory -> ");
   let ret = await repository.update(pid, body);
   return ret;
 };

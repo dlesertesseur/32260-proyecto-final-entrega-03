@@ -1,5 +1,4 @@
 const inspectCart = async (id) => {
-  console.log(`/api/carts/${id}`);
   location.href = `/api/carts/${id}`;
 };
 
@@ -34,7 +33,6 @@ const addProductToCart = async (cid, pid) => {
 };
 
 const removeProductCart = async (cid, pid) => {
-  // console.log(`removeProductCart -> /api/carts/${cid}/products/${pid}`);
   await fetch(`/api/carts/${cid}/products/${pid}`, {
     method: "DELETE",
     mode: "cors",

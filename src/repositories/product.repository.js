@@ -31,8 +31,8 @@ class ProductRepository {
   }
 
   async update(id, body) {
-    const product = await this.dao.update(id, body);
-    const entity = new Product(product);
+    await this.dao.update(id, body);
+    const entity = await this.findById(id);
     return(entity);
   }
 

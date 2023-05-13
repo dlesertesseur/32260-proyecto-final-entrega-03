@@ -8,7 +8,6 @@ const getAllProducts = async (limit = 10, page = 1, sort, query = null) => {
 };
 
 const findProductById = async (id) => {
-  console.log("findProductById -> ", id);
   let ret = await repository.findById(id);
   return ret;
 };

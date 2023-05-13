@@ -2,11 +2,12 @@ import mongoose from "mongoose";
 import config from "../../config/config.js";
 import CartDto from "../../dtos/cart.dto.js";
 import cartSchema from "../../models/cart.model.js";
+import { logger } from "../../logger/index.js";
 
 mongoose.set("strictQuery", false);
 mongoose.connect(config.MONGO_URL, { dbName: config.DB_NAME }, (error) => {
   if (error) {
-    console.log("Cannot connect to db");
+    logger.fatal("Cannot connect to db");
     process.exit();
   }
 });

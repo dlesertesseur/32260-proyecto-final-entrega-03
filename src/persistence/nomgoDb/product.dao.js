@@ -3,11 +3,12 @@ import mongoosePaginate from "mongoose-paginate-v2";
 import config from "../../config/config.js";
 import ProductDto from "../../dtos/product.dto.js";
 import productSchema from "../../models/product.model.js";
+import { logger } from "../../logger/index.js";
 
 mongoose.set("strictQuery", false);
 mongoose.connect(config.MONGO_URL, { dbName: config.DB_NAME }, (error) => {
   if (error) {
-    console.log("Cannot connect to db");
+    logger.fatal("ProductDao -> Cannot connect to db");
     process.exit();
   }
 });
@@ -94,20 +95,15 @@ class ProductDao {
       const productDto = new ProductDto(prod);
       return productDto;
     } catch (error) {
-      console.log("error", error)
       throw error;
     }
   }
 
   async update(id, product) {
     try {
-      let prod = await this.collection.findOneAndUpdate({ _id: id }, product, {
+      await this.collection.findOneAndUpdate({ _id: id }, product, {
         new: true,
       });
-
-      const productDto = new ProductDto(prod);
-      return productDto;
-
     } catch (error) {
       throw error;
     }
@@ -115,10 +111,7 @@ class ProductDao {
 
   async delete(id) {
     try {
-      const prod = await this.collection.deleteOne({ _id: id });
-      const productDto = new ProductDto(prod);
-
-      return productDto;
+      await this.collection.deleteOne({ _id: id });
     } catch (error) {
       throw error;
     }

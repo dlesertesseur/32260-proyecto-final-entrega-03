@@ -1,8 +1,6 @@
 import { EErrors } from "../../services/errors/enums.js";
 
 const errorHandler = (error, req, res, next) => {
-  console.log(error.cause);
-
   switch (error.code) {
     case EErrors.INVALID_TYPE_ERROR:
       res.json({ status: "error", error: error.name });

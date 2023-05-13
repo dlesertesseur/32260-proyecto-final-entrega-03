@@ -17,7 +17,9 @@ const config = {
   EMAIL_APP: process.env.EMAIL_APP,
   EMAIL_APP_PASSWORD: process.env.EMAIL_APP_PASSWORD,
   EMAIL_APP_PORT:process.env.EMAIL_APP_PORT,
-  EMAIL_APP_SERVICE:process.env.EMAIL_APP_SERVICE
+  EMAIL_APP_SERVICE:process.env.EMAIL_APP_SERVICE,
+  MODE:process.env.MODE,
+  LOG_FILE:'./errors.log'
 };
 
 export default config;
