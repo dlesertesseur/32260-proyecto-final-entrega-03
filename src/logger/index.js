@@ -27,13 +27,13 @@ const buildProdLogger = () => {
     levels: customLevels.levels,
     transports: [
       new winston.transports.Console({
-        level: "info",
+        level: "error",
         format: winston.format.combine(
           winston.format.colorize({ colors: customLevels.colors }),
           winston.format.simple()
         ),
       }),
-      new winston.transports.File({ filename: config.LOG_FILE, level: "info" }),
+      new winston.transports.File({ filename: config.LOG_FILE, level: "error" }),
     ],
   });
   return logger;
