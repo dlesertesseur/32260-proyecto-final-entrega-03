@@ -59,6 +59,14 @@ const logout = () => {
   location.replace("/api/auth/logout");
 };
 
+const toLogin = () => {
+  location.replace("/api/auth/login");
+};
+
+const toResetPassword = () => {
+  location.replace("/api/auth/resetpassword");
+};
+
 const createCart = async ( uid ) => {
   await fetch(`/api/user/addCart/${uid}`, {
     method: "PUT",
@@ -73,6 +81,22 @@ const createCart = async ( uid ) => {
       location.reload();
     });
 };
+
+const changeRole = async ( uid ) => {
+  await fetch(`/api/user/premium/${uid}`, {
+    method: "PUT",
+    mode: "cors",
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      location.reload();
+    });
+};
+
 
 const purchase = async ( cid ) => {
   await fetch(`/api/carts/${cid}/purchase`, {

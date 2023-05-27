@@ -14,12 +14,14 @@ const config = {
   PERSISTENCE: process.env.PERSISTENCE,
   ADMIN_ROLE: "admin",
   USER_ROLE: "user",
+  PREMIUM_ROLE: "premium",
   EMAIL_APP: process.env.EMAIL_APP,
   EMAIL_APP_PASSWORD: process.env.EMAIL_APP_PASSWORD,
   EMAIL_APP_PORT:process.env.EMAIL_APP_PORT,
   EMAIL_APP_SERVICE:process.env.EMAIL_APP_SERVICE,
   MODE:process.env.MODE,
-  LOG_FILE:'./errors.log'
+  LOG_FILE:'./errors.log',
+  MAX_MINUTES_TO_EXPIRE:60
 };
 
 export default config;

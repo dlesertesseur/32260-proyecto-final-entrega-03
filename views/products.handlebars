@@ -7,6 +7,7 @@
 <div style="font-size:14px; margin-top:5px">Edad: {{params.user.age}}</div>
 <div style="margin-top:10px">
   <button onclick="logout()">Logout</button>
+  <button onclick="changeRole('{{params.user.id}}')">Cambiar a rol: {{params.changeRole}}</button>
 </div>
 
 {{#if params.user.cart.id}}

@@ -4,6 +4,10 @@ import {
   logout,
   registerPassport,
   registerPage,
+  resetPasswordPage,
+  resetPassword,
+  newPasswordPage,
+  newPassword,
 } from "../controllers/auth.controller.js";
 import { Router } from "express";
 import passport from "passport";
@@ -13,6 +17,8 @@ const authRoute = Router();
 authRoute.get("/login", loginPage);
 authRoute.get("/register", registerPage);
 authRoute.get("/logout", logout);
+authRoute.get("/resetpassword", resetPasswordPage);
+authRoute.get("/newpassword", newPasswordPage);
 
 authRoute.post(
   "/register",
@@ -38,4 +44,8 @@ authRoute.get("/loginError", (req, res) => {
   const err = { message: req.flash("loginMessage") };
   res.render("login-error", { err });
 });
+
+authRoute.post("/resetpassword", resetPassword);
+authRoute.post("/newpassword", newPassword);
+
 export default authRoute;

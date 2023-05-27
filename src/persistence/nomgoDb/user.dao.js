@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import config from "../../config/config.js";
 import UserDto from "../../dtos/user.dto.js";
 import userSchema from "../../models/user.model.js";
-import { isValidPassword } from "../../util/Crypt.js";
+import { createHash, isValidPassword } from "../../util/Crypt.js";
 import { logger } from "../../logger/index.js";
 
 mongoose.set("strictQuery", false);
@@ -36,10 +36,10 @@ class UserDao {
     try {
       let userDto = null;
       const user = await this.collection.findOne({ email: email }).lean();
-      if(user){
+      if (user) {
         userDto = new UserDto(user);
       }
-      
+
       return userDto;
     } catch (error) {
       throw error;
@@ -61,6 +61,49 @@ class UserDao {
       let user = await this.collection.findOneAndUpdate({ _id: id }, data, {
         new: true,
       });
+
+      const userDto = new UserDto(user);
+      return userDto;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updatePassword(id, password) {
+    try {
+      const newPassword = createHash(password);
+      let user = await this.collection.findOneAndUpdate(
+        { _id: id },
+        {
+          $set: {
+            password: newPassword,
+          },
+        },
+        {
+          new: true,
+        }
+      );
+
+      const userDto = new UserDto(user);
+      return userDto;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateRole(id, role) {
+    try {
+      let user = await this.collection.findOneAndUpdate(
+        { _id: id },
+        {
+          $set: {
+            role: role,
+          },
+        },
+        {
+          new: true,
+        }
+      );
 
       const userDto = new UserDto(user);
       return userDto;
@@ -102,7 +145,7 @@ class UserDao {
       const user = await this.collection.findById(id).lean();
 
       const userDto = new UserDto(user);
-      
+
       return userDto;
     } catch (error) {
       throw error;

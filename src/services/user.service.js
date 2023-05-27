@@ -1,3 +1,4 @@
+import config from "../config/config.js";
 import UserRepository from "../repositories/user.repository.js";
 
 const repository = new UserRepository();
@@ -34,4 +35,13 @@ const addCartToUser = async (uid) => {
   return(user)
 }
 
-export { getAllUsers, findByEmail, findUserById, updateUser, insertUser, deleteUser, addCartToUser };
+const changeUserRole = async (id) => {
+  const user = await repository.findById(id);
+  if (user) {
+    await repository.changeUserRole(user.id, user.role === config.USER_ROLE ? config.PREMIUM_ROLE : config.USER_ROLE );
+  } else {
+    throw new Error(`email ${email} not found`);
+  }
+};
+
+export { getAllUsers, findByEmail, findUserById, updateUser, insertUser, deleteUser, addCartToUser, changeUserRole };

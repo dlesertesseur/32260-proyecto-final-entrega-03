@@ -1,3 +1,4 @@
+import config from "../config/config.js";
 import CustomError from "../services/errors/CustomError.js";
 import { EErrors } from "../services/errors/enums.js";
 import { generateProductErrorInfo } from "../services/errors/errorInfo.js";
@@ -34,7 +35,8 @@ const getProductsList = async (req, res) => {
   try {
     const data = await getAllProducts(limit, page, sort, query);
     const user = await findByEmail(req.user.email);
-    const params = { data: data, user: user };
+    const role = user.role === config.USER_ROLE ? config.PREMIUM_ROLE : config.USER_ROLE;
+    const params = { data: data, user: user, changeRole: role.toLocaleUpperCase() };
 
     res.render("products", {
       title: "Products",

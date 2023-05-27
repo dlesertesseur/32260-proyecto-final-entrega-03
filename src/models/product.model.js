@@ -12,6 +12,7 @@ const productSchema = mongoose.Schema({
   category: { type: String, required: true },
 
   thumbnail: { type: [String], required: true },
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: "user"},
 });
 
 export default productSchema;

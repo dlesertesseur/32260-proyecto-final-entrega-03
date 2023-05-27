@@ -1,5 +1,5 @@
 import passport from "passport";
-import { addCart } from "../controllers/user.controller.js";
+import { addCart, changeRole } from "../controllers/user.controller.js";
 import { Router } from "express";
 import { roleUserValidation } from "../middlewares/index.js";
 
@@ -11,5 +11,13 @@ userRoute.put(
   roleUserValidation,
   addCart
 );
+
+userRoute.put(
+  "/premium/:uid",
+  passport.authenticate("current", { session: false }),
+  roleUserValidation,
+  changeRole
+);
+
 
 export default userRoute;

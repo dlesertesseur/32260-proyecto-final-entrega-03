@@ -1,11 +1,11 @@
-import { insertCart } from "../services/cart.service.js";
 import {
   getAllUsers,
   findUserById,
   insertUser,
   updateUser,
   deleteUser,
-  addCartToUser
+  addCartToUser,
+  changeUserRole
 } from "../services/user.service.js";
 
 const getAll = async (req, res) => {
@@ -82,4 +82,20 @@ const addCart = async (req, res) => {
     res.status(400).send({ message: "Bad request" });
   }
 };
-export { getAll, findById, update, insert, remove, addCart };
+
+const changeRole = async (req, res) => {
+  const uid = req.params.uid;
+
+  if (uid) {
+    try {
+      const user = await changeUserRole(uid);
+      res.send(user);
+    } catch (error) {
+      req.logger.error(error);
+      res.status(500).send({ message: error.message });
+    }
+  } else {
+    res.status(400).send({ message: "Bad request" });
+  }
+};
+export { getAll, findById, update, insert, remove, addCart, changeRole };

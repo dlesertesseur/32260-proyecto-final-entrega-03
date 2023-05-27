@@ -2,6 +2,7 @@ import UserDaoFactory from "../factories/user.dao.factory.js";
 import config from "../config/config.js";
 import User from "../entities/user.entity.js";
 import CartDaoFactory from "../factories/cart.dao.factory.js";
+import { samePassword } from "../util/Crypt.js";
 
 class UserRepository {
   constructor() {
@@ -25,8 +26,29 @@ class UserRepository {
   }
 
   async findByEmail(email) {
+    let user = null;
     const userDto = await this.dao.findByEmail(email);
-    return new User(userDto);
+    if (userDto) {
+      user = new User(userDto);
+    }
+    return user;
+  }
+
+  async resetPassword(email, newPassword) {
+    const userDto = await this.dao.findByEmail(email);
+    if (userDto) {
+      if (!samePassword(userDto.password, newPassword)) {
+        await this.dao.updatePassword(userDto.id, newPassword);
+      } else {
+        throw new Error(
+          `You must choose a different password than the previous one`
+        );
+      }
+    }
+  }
+
+  async changeUserRole(id, role) {
+    await this.dao.updateRole(id, role);
   }
 
   async authenticate(email, password) {

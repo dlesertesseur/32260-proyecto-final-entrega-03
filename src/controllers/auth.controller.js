@@ -1,4 +1,9 @@
-import { authenticate, registerUser } from "../services/auth.service.js";
+import {
+  authenticate,
+  newPasswordFromEmail,
+  registerUser,
+  resetPasswordFromEmail,
+} from "../services/auth.service.js";
 import { createHash } from "../util/Crypt.js";
 import { getRoleByUser } from "../util/Validator.js";
 import { generateAuthToken } from "../util/jwt.js";
@@ -85,6 +90,62 @@ const logout = (req, res) => {
   res.redirect("/api/auth/login");
 };
 
+const resetPasswordPage = async (req, res) => {
+  try {
+    res.render("resetPassword", {
+      title: "Reset Password",
+      style: "index.css",
+    });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
+
+const newPasswordPage = async (req, res) => {
+  try {
+    const params = { email: req.query.email, code: req.query.code };
+    res.render("newPassword", {
+      title: "New Password",
+      style: "index.css",
+      params,
+    });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  let data = null;
+  try {
+    await resetPasswordFromEmail(req.get('host'), req.body.email);
+    data = {
+      title: "Reset Password",
+      message: `Check your email box (${req.body.email}), please.`,
+    };
+  } catch (error) {
+    data = { title: "Reset Password ERROR", message: error.message };
+  }
+  res.render("resetPassword-message", { data });
+};
+
+const newPassword = async (req, res) => {
+  let data = null;
+  try {
+    const email = req.body.email;
+    const code = req.body.code;
+    const newPass = req.body.password;
+
+    await newPasswordFromEmail(email, code, newPass);
+    data = {
+      title: "Reset Password",
+      message: `Your password has been changed successfully`,
+    };
+  } catch (error) {
+    data = { title: "Reset Password ERROR", message: error.message };
+  }
+  res.render("resetPassword-message", { data });
+};
+
 export {
   register,
   login,
@@ -93,4 +154,8 @@ export {
   logout,
   loginPassport,
   registerPassport,
+  resetPasswordPage,
+  resetPassword,
+  newPasswordPage,
+  newPassword
 };

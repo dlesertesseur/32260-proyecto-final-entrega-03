@@ -9,4 +9,9 @@ const isValidPassword = (user, password) => {
     return result;
 }
 
-export { createHash, isValidPassword };
+const samePassword = (password, newPassword) => {
+    let result = bcrypt.compareSync(newPassword, password);
+    return result;
+}
+
+export { createHash, isValidPassword, samePassword };
