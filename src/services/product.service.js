@@ -1,3 +1,4 @@
+import config from "../config/config.js";
 import ProductRepository from "../repositories/product.repository.js";
 
 const repository = new ProductRepository();
@@ -17,15 +18,46 @@ const insertProduct = async (product) => {
   return ret;
 };
 
-const updateProduct = async (pid, body) => {
-  let ret = await repository.update(pid, body);
-  return ret;
+const updateProduct = async (owner, pid, body) => {
+  let ret = null;
+  if (owner === config.ADMIN_ROLE) {
+    ret = await repository.update(pid, body);
+    return ret;
+  } else {
+    let product = await repository.findById(pid);
+    if (owner === product.owner) {
+      ret = await repository.update(pid, body);
+      return ret;
+    } else {
+      const error = new Error(
+        `The premium user can only modify their products`
+      );
+      error.statusCode = 401;
+      throw error;
+    }
+  }
 };
 
-const deleteProduct = async (pid) => {
-  let ret = await repository.delete(pid);
-  return ret;
+const deleteProduct = async (owner, pid) => {
+  let ret = null;
+  if (owner === config.ADMIN_ROLE) {
+    ret = await repository.delete(pid);
+    return ret;
+  } else {
+    let product = await repository.findById(pid);
+    if (owner === product.owner) {
+      ret = await repository.delete(pid);
+      return ret;
+    } else {
+      const error = new Error(
+        `The premium user can only delete their products`
+      );
+      error.statusCode = 401;
+      throw error;
+    }
+  }
 };
+
 export {
   getAllProducts,
   findProductById,

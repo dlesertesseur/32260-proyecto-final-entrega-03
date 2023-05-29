@@ -9,7 +9,7 @@ class ProductDto {
     this.stock = stock;
     this.category = category;
     this.thumbnail = thumbnail;
-    this.owner = owner?._id;
+    this.owner = owner;
   }
 }
 

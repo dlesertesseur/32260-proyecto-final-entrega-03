@@ -88,8 +88,8 @@ const changeRole = async (req, res) => {
 
   if (uid) {
     try {
-      const user = await changeUserRole(uid);
-      res.send(user);
+      await changeUserRole(uid);
+      res.send({ message: "The role was successfully change"});
     } catch (error) {
       req.logger.error(error);
       res.status(500).send({ message: error.message });

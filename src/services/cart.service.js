@@ -31,9 +31,25 @@ const removeCart = async (cid) => {
   return ret;
 };
 
-const addProductToCard = async (cid, pid, quantity) => {
-  const ret = await repository.addProduct(cid, pid, quantity);
-  return ret;
+const addProductToCard = async (owner, cid, pid, quantity) => {
+  // const ret = await repository.addProduct(cid, pid, quantity);
+  // return ret;
+
+
+  const productRepository = new ProductRepository();
+  let product = await productRepository.findById(pid);
+  if (owner !== product.owner) {
+    const ret = await repository.addProduct(cid, pid, quantity);;
+    return ret;
+  } else {
+    const error = new Error(
+      `Premium user cannot add their own products to the cart`
+    );
+    error.statusCode = 401;
+    throw error;
+  }
+
+
 };
 
 const removeProductCart = async (cid, pid) => {

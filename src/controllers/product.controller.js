@@ -79,11 +79,17 @@ const insert = async (req, res, next) => {
       stock: z.number(),
       category: z.string(),
       thumbnail: z.string().array(),
+      //owner: z.string().optional(),
     });
 
     /*Evaluate payload*/
     const payload = validate.safeParse(req.body);
     if (payload.success) {
+
+      if(req.user.role === config.PREMIUM_ROLE) {
+        payload.data.owner = req.user.email;
+      }
+
       const product = await insertProduct(payload.data);
       res.send(product);
     } else {
@@ -99,15 +105,20 @@ const insert = async (req, res, next) => {
   }
 };
 
+const determinateOwner = (req) => {
+  const owner = req.user.role === config.ADMIN_ROLE ? config.ADMIN_ROLE : req.user.email;
+  return(owner);
+}
+
 const update = async (req, res) => {
   const pid = req.params.pid;
-
+  const owner = determinateOwner(req);
   if (pid) {
     try {
-      const product = await updateProduct(pid, req.body);
+      const product = await updateProduct(owner, pid, req.body);
       res.send(product);
     } catch (error) {
-      res.status(500).send({ message: error.message });
+      res.status(error?.statusCode ? error.statusCode : 500).send({ message: error.message });
     }
   } else {
     res.status(400).send({ message: "Bad request" });
@@ -116,13 +127,13 @@ const update = async (req, res) => {
 
 const remove = async (req, res) => {
   const pid = req.params.pid;
-
+  const owner = determinateOwner(req);
   if (pid) {
     try {
-      const product = await deleteProduct(pid);
+      const product = await deleteProduct(owner, pid);
       res.send(product);
     } catch (error) {
-      res.status(500).send({ message: error.message });
+      res.status(error?.statusCode ? error.statusCode : 500).send({ message: error.message });
     }
   } else {
     res.status(400).send({ message: "Bad request" });

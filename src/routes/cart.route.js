@@ -10,6 +10,7 @@ import {
   updateProduct,
   getCartsList,
   purchase,
+  processError,
 } from "../controllers/cart.controller.js";
 import { Router } from "express";
 import { roleUserValidation } from "../middlewares/index.js";
@@ -78,6 +79,12 @@ cartRoute.delete(
   "/:cid/products/:pid",
   passport.authenticate("current", { session: false }),
   removeProduct
+);
+
+cartRoute.get(
+  "/error/:erridx",
+  passport.authenticate("current", { session: false }),
+  processError
 );
 
 export default cartRoute;

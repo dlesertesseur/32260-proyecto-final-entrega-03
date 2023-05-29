@@ -28,7 +28,15 @@ const addProductToCart = async (cid, pid) => {
   })
     .then((res) => res.json())
     .then((data) => {
-      location.assign(`/api/carts/${cid}`);
+      console.log("addProductToCart -> ", data)
+      if (data?.status && data?.status !== 'created') {
+        location.assign(`/api/carts/error/1`);
+      } else {
+        location.assign(`/api/carts/${cid}`);
+      }
+    })
+    .catch((err) => {
+      console.log("################", err);
     });
 };
 
@@ -67,7 +75,11 @@ const toResetPassword = () => {
   location.replace("/api/auth/resetpassword");
 };
 
-const createCart = async ( uid ) => {
+const toBack = () => {
+  history.back();
+};
+
+const createCart = async (uid) => {
   await fetch(`/api/user/addCart/${uid}`, {
     method: "PUT",
     mode: "cors",
@@ -82,7 +94,7 @@ const createCart = async ( uid ) => {
     });
 };
 
-const changeRole = async ( uid ) => {
+const changeRole = async (uid) => {
   await fetch(`/api/user/premium/${uid}`, {
     method: "PUT",
     mode: "cors",
@@ -94,11 +106,13 @@ const changeRole = async ( uid ) => {
     .then((res) => res.json())
     .then((data) => {
       location.reload();
+    })
+    .catch((err) => {
+      console.log("changeRole err -> ", err);
     });
 };
 
-
-const purchase = async ( cid ) => {
+const purchase = async (cid) => {
   await fetch(`/api/carts/${cid}/purchase`, {
     method: "POST",
     mode: "cors",

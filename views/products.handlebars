@@ -35,6 +35,7 @@
     <th>Stock</th>
     <th>Categoria</th>
     <th>Thumbnail</th>
+    <th>Owner</th>
   </tr>
   {{#each params.data.payload}}
     <tr>
@@ -46,6 +47,7 @@
       <td>{{stock}}</td>
       <td>{{category}}</td>
       <td>{{thumbnail}}</td>
+      <td>{{owner}}</td>
       
       {{#if ../params.user.cart.id}}
           <td>

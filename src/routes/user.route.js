@@ -15,7 +15,6 @@ userRoute.put(
 userRoute.put(
   "/premium/:uid",
   passport.authenticate("current", { session: false }),
-  roleUserValidation,
   changeRole
 );
 

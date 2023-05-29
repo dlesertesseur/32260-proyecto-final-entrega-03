@@ -1,3 +1,4 @@
+import config from "../config/config.js";
 import {
   findCardById,
   getAllCards,
@@ -98,6 +99,11 @@ const findById = async (req, res) => {
   }
 };
 
+const determinateOwner = (req) => {
+  const owner = req.user.role === config.ADMIN_ROLE ? config.ADMIN_ROLE : req.user.email;
+  return(owner);
+}
+
 const addProduct = async (req, res) => {
   let cart = null;
   const cid = req.params.cid;
@@ -106,11 +112,12 @@ const addProduct = async (req, res) => {
 
   if (cid && pid) {
     try {
-      cart = await addProductToCard(cid, pid, quantity);
+      const owner = determinateOwner(req);
+      cart = await addProductToCard(owner, cid, pid, quantity);
       res.send(cart);
     } catch (error) {
       req.logger.error(error.message);
-      res.status(500).send({ message: error.message });
+      res.send({status:"error",error: error.message});
     }
   } else {
     req.logger.error("Bad request");
@@ -176,6 +183,32 @@ const purchase = async (req, res) => {
   }
 };
 
+const getError = (index) => {
+  let ret = null;
+  switch (index) {
+    case "1":
+      ret = "Premium user cannot add their own products to the cart"
+      break;
+  
+    default:
+      ret = `Error code ${index} not defined`;
+      break;
+  }
+
+  return(ret);
+}
+const processError = async (req, res) => {
+  const index = req.params.erridx
+  try {
+    const errorMessage = getError(index)
+    const err = {message: errorMessage};
+    res.render("cart-error", err);
+  } catch (error) {
+    req.logger.error(error.message);
+    res.status(500).send({ message: error.message });
+  }
+};
+
 export {
   getAll,
   findById,
@@ -187,4 +220,5 @@ export {
   updateProduct,
   getCartsList,
   purchase,
+  processError
 };
