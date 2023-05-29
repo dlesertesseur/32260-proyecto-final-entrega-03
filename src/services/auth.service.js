@@ -18,7 +18,7 @@ cron.schedule("* * * * *", () => {
   const toDelete = [];
   const actual = Date.now();
 
-  console.log("cron.schedule ->", codeByEmail);
+  //console.log("cron.schedule ->", codeByEmail);
 
   codeByEmail.forEach((value, key) => {
     if (expiredCode(value.timestamp, actual, config.MAX_MINUTES_TO_EXPIRE)) {
