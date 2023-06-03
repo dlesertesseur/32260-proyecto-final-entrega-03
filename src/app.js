@@ -18,10 +18,11 @@ import errorHandler from "./middlewares/errors/index.js";
 import loggerRoute from "./routes/logger.route.js";
 import { Command } from "commander";
 import { addLogger, logger } from "./logger/index.js";
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
 
 const program = new Command();
 
-/*Terminar*/
 program.option('--persistence <mode>', 'Presistence type <moongose || filesystem>', "moongose");
 program.parse(process.argv);
 config.PERSISTENCE = program.opts().persistence;
@@ -61,6 +62,23 @@ app.set("views", "./views");
 app.use(passport.initialize());
 //app.use(passport.session());
 
+
+
+//SWAGGER
+const options = {
+  definition: {
+      openapi: "3.0.1",
+      info: {
+          title: "e-commerce API specification",
+          description: "Express API with Swagger",
+      },
+  },
+  apis: [ `./docs/**/*.yaml` ],
+};
+
+const swaggerSpecs = swaggerJsdoc(options);
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(swaggerSpecs));
+
 app.use("/api/auth", authRoute);
 app.use("/api/carts", cartRoute);
 app.use("/api/products", productRoute);
@@ -74,7 +92,6 @@ app.use(errorHandler);
 app.use("/", (req, res) => {
   res.redirect("/api/auth/login");
 });
-
 
 const httpServer = app.listen(config.PORT, () => {
   logger.info(`Server running on port: ${httpServer.address().port}`);
