@@ -6,7 +6,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node src/app.js --persistence mongoose",
-    "dev": "nodemon src/app.js --persistence mongoose"
+    "dev": "nodemon src/app.js --persistence mongoose",
+    "test": "mocha test/**/*.test.js --timeout 5000"
   },
   "keywords": [],
   "author": "",
@@ -39,6 +40,9 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.6.0"
+    "@faker-js/faker": "^7.6.0",
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.3"
   }
 }
