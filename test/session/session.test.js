@@ -6,7 +6,7 @@ const expect = chai.expect;
 const requester = supertest(URL_SERVER);
 let cookie = null;
 
-describe("E-COMMERSE - integration tests - SESSION", () => {
+describe("E-COMMERSE - integration test - SESSION", () => {
   describe("Admin login test", () => {
     it("debe autenticarse correctamente con credenciales de administrador", async () => {
       const result = await requester
@@ -45,9 +45,6 @@ describe("E-COMMERSE - integration tests - SESSION", () => {
         .set("Content-Type", "application/json");
 
       const { statusCode, ok, _body } = result;
-      // console.log("statusCode ->", statusCode);
-      // console.log("ok ->", ok);
-      // console.log("_body ->", _body);
 
       expect(result.statusCode).to.be.equal(302);
     });

@@ -12,7 +12,7 @@ const expect = chai.expect;
 const requester = supertest(URL_SERVER);
 let cookie = null;
 
-describe("E-COMMERSE - integration tests - PRODUCTS", () => {
+describe("E-COMMERSE - integration test - PRODUCTS", () => {
   describe("Products", () => {
     it("debe autenticarse correctamente con credenciales del usuario", async () => {
       const result = await requester

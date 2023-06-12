@@ -19,8 +19,8 @@ const newUser = {
 };
 
 const userCredentials = {
-  email: newUser.email,
-  password: newUser.password,
+  email: "jf@gmail.com",
+  password: "123",
 };
 
 export { adminCredentials, userCredentials, URL_SERVER, newUser, productId, cartId };
