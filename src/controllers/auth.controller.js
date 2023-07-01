@@ -1,6 +1,7 @@
 import {
   authenticate,
   newPasswordFromEmail,
+  registerLasConnection,
   registerUser,
   resetPasswordFromEmail,
 } from "../services/auth.service.js";
@@ -86,6 +87,7 @@ const logout = (req, res) => {
   // req.session.destroy((error) => {
   //   res.redirect("/api/auth/login");
   // });
+  registerLasConnection(req.user.id)
   res.clearCookie("authToken");
   res.redirect("/api/auth/login");
 };

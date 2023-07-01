@@ -28,8 +28,8 @@ const addProductToCart = async (cid, pid) => {
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log("addProductToCart -> ", data)
-      if (data?.status && data?.status !== 'created') {
+      console.log("addProductToCart -> ", data);
+      if (data?.status && data?.status !== "created") {
         location.assign(`/api/carts/error/1`);
       } else {
         location.assign(`/api/carts/${cid}`);
@@ -80,7 +80,7 @@ const toBack = () => {
 };
 
 const createCart = async (uid) => {
-  await fetch(`/api/user/addCart/${uid}`, {
+  await fetch(`/api/users/addCart/${uid}`, {
     method: "PUT",
     mode: "cors",
     cache: "no-cache",
@@ -95,7 +95,7 @@ const createCart = async (uid) => {
 };
 
 const changeRole = async (uid) => {
-  await fetch(`/api/user/premium/${uid}`, {
+  await fetch(`/api/users/premium/${uid}`, {
     method: "PUT",
     mode: "cors",
     cache: "no-cache",
@@ -105,7 +105,25 @@ const changeRole = async (uid) => {
   })
     .then((res) => res.json())
     .then((data) => {
-      location.reload();
+      console.log("changeRole data -> ", data);
+      if (data.status === "error") {
+        const errorPanel = document.getElementById("errorPanel");
+        const errorPanelText = document.getElementById("errorPanelText");
+        const errorPanelDetail = document.getElementById("errorPanelDetail");
+        errorPanel.visiblity = "visible";
+        errorPanelText.innerHTML = data.message;
+        // errorPanelDetail.innerHTML = `<ul>${data.unloadDocs.map((d) => {
+        //   return(`<li>${d}</li>`)})}</ul>`;
+
+        let list = "Unload documents:<br/><ul>"; 
+        data.unloadDocs.forEach(d => {
+          list += `<li>${d}</li>`;
+        });
+        list += "</ul>";
+        errorPanelDetail.innerHTML=list;
+      } else {
+        location.reload();
+      }
     })
     .catch((err) => {
       console.log("changeRole err -> ", err);
@@ -128,4 +146,8 @@ const purchase = async (cid) => {
       // const url = location.href + "/tickets/" + data.ticket.id;
       // location.assign(url);
     });
+};
+
+const uploadDocumentsPage = () => {
+  location.assign("/api/users/documents");
 };

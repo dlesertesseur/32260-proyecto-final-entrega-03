@@ -11,6 +11,8 @@ class User
       this.age = userDto.age,
       this.role = userDto.role,
       this.cart = userDto?.cart ? new Cart(userDto.cart) : null;
+      this.documents = userDto.documents,
+      this.last_connection = userDto.last_connection
   }
 
   getFullName()

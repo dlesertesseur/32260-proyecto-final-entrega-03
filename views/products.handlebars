@@ -7,7 +7,15 @@
 <div style="font-size:14px; margin-top:5px">Edad: {{params.user.age}}</div>
 <div style="margin-top:10px">
   <button onclick="logout()">Logout</button>
+  <button onclick="uploadDocumentsPage('{{params.user.id}}')">Subir documentacion</button>
   <button onclick="changeRole('{{params.user.id}}')">Cambiar a rol: {{params.changeRole}}</button>
+</div>
+
+<div id="errorPanel" style="margin-top:10px; border:1px; border-color:#ff0000; ">
+  <p>
+    <h2 id="errorPanelText"></h2>
+    <div id="errorPanelDetail"></div>
+  </p>
 </div>
 
 {{#if params.user.cart.id}}

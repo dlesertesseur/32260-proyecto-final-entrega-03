@@ -84,7 +84,7 @@ app.use("/api/carts", cartRoute);
 app.use("/api/products", productRoute);
 app.use("/api/categories", categoryRoute);
 app.use("/api/sessions", sessionsRoute);
-app.use("/api/user", userRoute);
+app.use("/api/users", userRoute);
 app.use("/api/mockingproducts", mockRoute);
 app.use("/api/loggerTest", loggerRoute);
 app.use(errorHandler);

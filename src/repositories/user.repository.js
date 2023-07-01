@@ -74,6 +74,18 @@ class UserRepository {
     }
     return userDtoUpdated;
   }
+
+  async updateDocumentsStatus(uid, documentStatus) {
+    try {
+      const updatedUser = await this.dao.updateDocumentsStatus(
+        uid,
+        documentStatus
+      );
+      return updatedUser;
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
 }
 
 export default UserRepository;

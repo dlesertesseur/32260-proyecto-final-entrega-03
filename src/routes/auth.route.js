@@ -16,7 +16,11 @@ const authRoute = Router();
 
 authRoute.get("/login", loginPage);
 authRoute.get("/register", registerPage);
-authRoute.get("/logout", logout);
+authRoute.get(
+  "/logout",
+  passport.authenticate("current", { session: false }),
+  logout
+);
 authRoute.get("/resetpassword", resetPasswordPage);
 authRoute.get("/newpassword", newPasswordPage);
 

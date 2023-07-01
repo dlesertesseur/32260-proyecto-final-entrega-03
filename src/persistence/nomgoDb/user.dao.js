@@ -166,6 +166,40 @@ class UserDao {
       throw error;
     }
   }
+
+  async updateDocumentsStatus(uid, documentStatus) {
+    try {
+      const user = await this.findById(uid);
+      if (user) {
+        const duplicateDocuments = [];
+        const documentsToAdd = documentStatus.map((doc) => ({
+          name: doc.name,
+          reference: doc.reference,
+        }));
+
+        documentsToAdd.forEach((newDoc) => {
+          const alreadyExists = user.documents.some(
+            (existingDoc) => existingDoc.name === newDoc.name
+          );
+
+          if (!alreadyExists) {
+            user.documents.push(newDoc);
+          } else {
+            duplicateDocuments.push(newDoc.name);
+          }
+        });
+
+        await this.update(user.id, { documents: user.documents });
+        return { status: 200, message:"document uploaded", duplicateDocuments:duplicateDocuments };
+      } else {
+        throw new Error("Usuario Inexistente");
+      }
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
 }
+
+
 
 export default UserDao;

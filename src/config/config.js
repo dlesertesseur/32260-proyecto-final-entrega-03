@@ -21,7 +21,8 @@ const config = {
   EMAIL_APP_SERVICE:process.env.EMAIL_APP_SERVICE,
   MODE:process.env.MODE,
   LOG_FILE:'./errors.log',
-  MAX_MINUTES_TO_EXPIRE:60
+  MAX_MINUTES_TO_EXPIRE:60,
+  DOC_NAMES:["IDENTIFICACION", "DOMICILIO", "ESTADO"]
 };
 
 export default config;

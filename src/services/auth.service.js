@@ -33,6 +33,9 @@ cron.schedule("* * * * *", () => {
 
 const authenticate = async (body) => {
   const user = await repository.authenticate(body.email, body.password);
+
+  repository.update(user.id, { last_connection: Date.now() });
+
   return user;
 };
 
@@ -86,9 +89,14 @@ const newPasswordFromEmail = async (email, code, newPass) => {
   }
 };
 
+const registerLasConnection = async (uid) => {
+  repository.update(uid, { last_connection: Date.now() });
+};
+
 export {
   authenticate,
   registerUser,
   resetPasswordFromEmail,
   newPasswordFromEmail,
+  registerLasConnection
 };
